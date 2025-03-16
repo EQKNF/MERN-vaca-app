@@ -12,7 +12,7 @@ const MainNavigation = () => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
   const [drawerIsVisible, setDrawerIsVisible] = useState(false);
 
-  const toggleDrawer = (open) => {
+  const toggleDrawerHandler = (open) => {
     setDrawerIsVisible(true);
     setDrawerIsOpen(open);
   };
@@ -26,11 +26,11 @@ const MainNavigation = () => {
 
   return (
     <>
-      {drawerIsOpen && <Backdrop onClick={() => toggleDrawer(false)} />}
+      {drawerIsOpen && <Backdrop onClick={() => toggleDrawerHandler(false)} />}
       <MainHeader>
         <button
           className="main-navigation__menu-btn"
-          onClick={() => toggleDrawer(true)}
+          onClick={() => toggleDrawerHandler(true)}
         >
           <span />
           <span />
@@ -45,7 +45,10 @@ const MainNavigation = () => {
       </MainHeader>
 
       {drawerIsVisible && (
-        <SideDrawer drawerIsOpen={drawerIsOpen}>
+        <SideDrawer
+          drawerIsOpen={drawerIsOpen}
+          onClick={() => toggleDrawerHandler(false)}
+        >
           <nav className="main-navigation__drawer-nav">
             <NavLinks />
           </nav>

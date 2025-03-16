@@ -3,9 +3,12 @@ import reactDom from "react-dom";
 
 import "./SideDrawer.css";
 
-const SideDrawer = ({ drawerIsOpen, children }) => {
+const SideDrawer = ({ drawerIsOpen, children, onClick }) => {
   const content = (
-    <aside className={`side-drawer ${drawerIsOpen ? " open" : "close"}`}>
+    <aside
+      className={`side-drawer ${drawerIsOpen ? " open" : "close"}`}
+      onClick={onClick}
+    >
       {children}
     </aside>
   );
