@@ -8,3 +8,28 @@
   background: white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
 }
+@keyframes slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.side-drawer {
+  animation: slide-in 0.2s ease-out forwards;
+}
+
+@keyframes slide-out {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.side-drawer.close {
+  animation: slide-out 0.2s ease-out forwards;
+}
