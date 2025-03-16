@@ -14,9 +14,14 @@ const ModalOverlay = ({
   children,
   footerClass,
   footer,
+  show,
 }) => {
+  const modalClasses = show
+    ? `modal modal--open ${className}`
+    : `modal ${className}`;
+
   const content = (
-    <div className={`modal ${className}`} style={style}>
+    <div className={modalClasses} style={style}>
       <header className={`modal__header ${headerClass}`}>
         <h2>{header}</h2>
       </header>
@@ -26,6 +31,7 @@ const ModalOverlay = ({
       </form>
     </div>
   );
+
   return ReactDOM.createPortal(content, document.getElementById("modal-hook"));
 };
 
