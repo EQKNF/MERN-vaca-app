@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import MainHeader from "./MainHeader";
@@ -8,37 +8,49 @@ import Backdrop from "../UIElements/Backdrop";
 
 import "./MainNavigation.css";
 
-const MainNavigation = (props) => {
+const MainNavigation = () => {
   const [drawerIsOpen, setDrawerIsOpen] = useState(false);
+  const [drawerIsVisible, setDrawerIsVisible] = useState(false);
 
-  const openDrawer = () => setDrawerIsOpen(true);
-  const closeDrawer = () => setDrawerIsOpen(false);
+  const toggleDrawer = (open) => {
+    setDrawerIsVisible(true);
+    setDrawerIsOpen(open);
+  };
+
+  useEffect(() => {
+    if (!drawerIsOpen) {
+      const timer = setTimeout(() => setDrawerIsVisible(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [drawerIsOpen]);
 
   return (
     <>
-      {drawerIsOpen ? (
-        <>
-          <SideDrawer>
-            <nav className="main-navigation__drawer-nav">
-              <NavLinks />
-            </nav>
-          </SideDrawer>
-          <Backdrop onClick={closeDrawer} />
-        </>
-      ) : null}
+      {drawerIsOpen && <Backdrop onClick={() => toggleDrawer(false)} />}
       <MainHeader>
-        <button className="main-navigation__menu-btn" onClick={openDrawer}>
+        <button
+          className="main-navigation__menu-btn"
+          onClick={() => toggleDrawer(true)}
+        >
           <span />
           <span />
           <span />
         </button>
         <h1 className="main-navigation__title">
-          <Link to={"/"}>YourPlaces</Link>
+          <Link to="/">YourPlaces</Link>
         </h1>
         <nav className="main-navigation__header-nav">
           <NavLinks />
         </nav>
       </MainHeader>
+
+      {drawerIsVisible && (
+        <SideDrawer drawerIsOpen={drawerIsOpen}>
+          <nav className="main-navigation__drawer-nav">
+            <NavLinks />
+          </nav>
+        </SideDrawer>
+      )}
     </>
   );
 };

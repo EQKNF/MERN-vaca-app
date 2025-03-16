@@ -17,10 +17,6 @@
   }
 }
 
-.side-drawer {
-  animation: slide-in 0.2s ease-out forwards;
-}
-
 @keyframes slide-out {
   from {
     transform: translateX(0);
@@ -30,6 +26,9 @@
   }
 }
 
+.side-drawer.open {
+  animation: slide-in 0.2s ease-out forwards;
+}
 .side-drawer.close {
   animation: slide-out 0.2s ease-out forwards;
 }
