@@ -26,11 +26,16 @@ const ModalOverlay = ({
       </form>
     </div>
   );
-  return ReactDOM.createPortal(content, document.getElementById("modal-root"));
+  return ReactDOM.createPortal(content, document.getElementById("modal-hook"));
 };
 
-const Modal = ({ show }) => {
-  return <>{show ? <Backdrop /> : null}</>;
+const Modal = (props) => {
+  return (
+    <>
+      {props.show ? <Backdrop onClick={props.onCancel} /> : null}
+      <ModalOverlay {...props} />
+    </>
+  );
 };
 
 export default Modal;
