@@ -3,15 +3,15 @@ import React, { useState } from "react";
 import Card from "../../shared/components/UIElements/Card";
 import Button from "../../shared/components/FormElements/Button";
 import Modal from "../../shared/components/UIElements/Modal";
+import Map from "../../shared/components/UIElements/Map";
 import "./PlaceItem.css";
 
-const PlaceItem = ({ id, image, title, description, address }) => {
+const PlaceItem = ({ id, image, title, description, address, coordinates }) => {
   const [showMap, setShowMap] = useState(false);
 
   const openMapHandler = () => setShowMap(true);
   const closeMapHandler = () => {
     setShowMap(false);
-    console.log("Map closed");
   };
 
   return (
@@ -25,7 +25,7 @@ const PlaceItem = ({ id, image, title, description, address }) => {
         footer={<Button onClick={closeMapHandler}>CLOSE</Button>}
       >
         <div className="map-container">
-          <h2>THE MAP!</h2>
+          <Map coordinates={coordinates} />
         </div>
       </Modal>
 
