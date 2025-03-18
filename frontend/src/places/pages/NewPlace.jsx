@@ -4,7 +4,7 @@ import Input from "../../shared/components/FormElements/Input";
 import {
   VALIDATOR_REQUIRE,
   VALIDATOR_MINLENGTH,
-} from "../../shared/components/utils/validators";
+} from "../../shared/utils/validators";
 import Button from "../../shared/components/FormElements/Button";
 import { useForm } from "../../shared/hooks/useForm";
 
