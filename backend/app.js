@@ -1,6 +1,6 @@
 import express from "express";
-import bodyParser from "body-parser";
 
+import HttpError from "./models/httpError.js";
 import placesRoutes from "./routes/placesRoutes.js";
 
 const PORT = 5000;
@@ -9,6 +9,11 @@ const app = express();
 
 app.use(express.json());
 app.use("/api/places", placesRoutes);
+
+app.use((req, res, next) => {
+  next(new HttpError("could not find this route", 404));
+});
+
 app.use((error, req, res, next) => {
   if (res.headerSent) {
     return next(error);
