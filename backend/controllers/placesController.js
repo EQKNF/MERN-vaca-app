@@ -51,7 +51,7 @@ const getPlaceByUserId = async (req, res, next) => {
     userPlaces = await Place.find({ creator: userId });
   } catch (error) {
     const err = new HttpError(
-      "Fetching placed with id: " + userId + " Failed, please try again later",
+      "Fetching place with id: " + userId + " Failed, please try again later",
       500
     );
     return next(err);
@@ -63,11 +63,9 @@ const getPlaceByUserId = async (req, res, next) => {
     );
   }
 
-  res
-    .status(200)
-    .json({
-      places: userPlaces.map((place) => place.toObject({ getters: true })),
-    });
+  res.status(200).json({
+    places: userPlaces.map((place) => place.toObject({ getters: true })),
+  });
 };
 
 const createPlace = async (req, res, next) => {
@@ -109,7 +107,7 @@ const createPlace = async (req, res, next) => {
   res.status(201).json({ place: newPlace });
 };
 
-const updatePlace = (req, res, next) => {
+const updatePlace = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     console.log(errors);
@@ -119,24 +117,63 @@ const updatePlace = (req, res, next) => {
   const { title, description } = req.body;
   const placeId = req.params.pid;
 
-  const updatedPlace = { ...DUMMY_PLACES.find((p) => p.id === placeId) };
-  const placeIndex = DUMMY_PLACES.findIndex((p) => p.id === placeId);
+  let updatedPlace;
+  try {
+    updatedPlace = await Place.findById(placeId);
+  } catch (error) {
+    const err = new HttpError(
+      "Updating place with id: " + placeId + " Failed, please try again later",
+      500
+    );
+    return next(err);
+  }
+
   updatedPlace.title = title;
   updatedPlace.description = description;
 
-  DUMMY_PLACES[placeIndex] = updatedPlace;
-
-  res.status(200).json({ place: updatedPlace });
-};
-
-const deletePlace = (req, res, next) => {
-  const placeId = req.params.pid;
-
-  if (!DUMMY_PLACES.find((p) => p.id === placeId)) {
-    return next(new HttpError("Couldn't find a place for that id", 404));
+  try {
+    await updatedPlace.save();
+  } catch (error) {
+    const err = new HttpError(
+      "Something went wrong, could not update place",
+      500
+    );
+    return next(err);
   }
 
-  DUMMY_PLACES = DUMMY_PLACES.filter((p) => p.id !== placeId);
+  res.status(200).json({ place: updatedPlace.toObject({ getters: true }) });
+};
+
+const deletePlace = async (req, res, next) => {
+  const placeId = req.params.pid;
+
+  let place;
+
+  try {
+    place = await Place.findById(placeId);
+
+    if (!place) {
+      const err = new HttpError(`Place with id ${placeId} not found.`, 404);
+      return next(err);
+    }
+  } catch (error) {
+    const err = new HttpError(
+      "Fetching place failed, please try again later.",
+      500
+    );
+    return next(err);
+  }
+
+  try {
+    await place.deleteOne();
+  } catch (error) {
+    const err = new HttpError(
+      `Something went wrong, could not delete place with id ${placeId}.`,
+      500
+    );
+    return next(err);
+  }
+
   res.status(200).json({ message: "Deleted place." });
 };
 
